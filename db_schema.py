@@ -1,9 +1,12 @@
 CREATE_USERS = '''
     CREATE TABLE IF NOT EXISTS users(
         id INTEGER PRIMARY KEY,
-        email VARCHAR(50) UNIQUE,
-        hash_salt VARCHAR(10) UNIQUE,
+        username VARCHAR(20) NOT NULL,
+        usertype VARCHAR(5),
+        email VARCHAR(50) UNIQUE NOT NULL,
+        hash_salt VARCHAR(10) UNIQUE NOT NULL,
         hashed_pw VARCHAR(32)
+
     );
 '''
 
@@ -42,6 +45,6 @@ CREATE_RESERVATIONS = '''
 '''
 
 USER_SIGNUP = '''
-    INSERT INTO USERS(email, hash_salt, hashed_pw)
-    VALUES(?,?,?);
+    INSERT INTO USERS(email, username, hash_salt, hashed_pw)
+    VALUES(?,?,?,?);
 '''
