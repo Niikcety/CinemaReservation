@@ -29,8 +29,13 @@ Choose an option:
                 self.start()
 
             elif self.user.tp == 'admin':
-                pass
-                # print(ADMIN_MENU)
+                print('Choose an option.\n')
+                print(ADMIN_MENU)
+
+                choice = int(input('Choose and option: '))
+                if choice == 5:
+                    print('Bye!')
+                    break
 
             else:
                 print('Choose an option.\n')
