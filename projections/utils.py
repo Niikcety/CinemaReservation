@@ -31,16 +31,12 @@ db = Database()
 def count_empty_seats(room):
     free_space = 0
     for i in range(0, 10):
-        free_space += room[i].count('. ')
+        free_space += room[i].count('.')
     return free_space
 
 
 def check_if_seat_is_empty(room, x, y):
     return room[x - 1][y - 1] == '. '
-
-
-def make_seat_taken(room, x, y):
-    room[x - 1][y - 1] = 'X '
 
 
 # def add_projection():
@@ -99,12 +95,12 @@ row_line = 100 * '.'
 alphabets = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
 
 
-def into_list_of_tuples(str, rows):
+def into_list_of_tuples(fstr):
     rows = []
     row = []
     for i in range(10):
         row.append(alphabets[i])
-        row += list(row_line[i * 10: (i + 1) * 10])
+        row += list(fstr[i * 10: (i + 1) * 10])
         rows.append(tuple(row))
         row = []
     return rows

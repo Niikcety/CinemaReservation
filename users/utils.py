@@ -4,7 +4,8 @@ from string import ascii_lowercase, ascii_uppercase, digits, punctuation
 from hashlib import md5
 from random import choice
 from db import Database
-from db_schema import *
+
+from users.model import UserModel
 
 db = Database()
 
@@ -38,51 +39,7 @@ def pw_prompt(signup=False):
     return pw
 
 
-def signup():
 
-    email = input('Enter email: ')
-    username = input('Enter username: ')
-    pw = pw_prompt(signup=True)
-
-    hash_salt = salt_shaker()
-    hashed_pw = pw_hasher(pw + hash_salt)
-
-    with db.conn:
-        db.c.execute(USER_SIGNUP, (email, username, hash_salt, hashed_pw))
-
-    print(f'\nUser {email} added successfully!')
-
-
-def login():
-    email = input('Enter email: ')
-    supplied_pw = pw_prompt()
-
-    with db.conn:
-        db.c.execute('''
-            SELECT *
-            FROM USERS WHERE email = (?)
-            ''', (email,))
-
-        user_info = db.c.fetchone()
-        uid = user_info[0]
-        username = user_info[1]
-        usertype = user_info[2]
-        hash_salt = user_info[4]
-        correct_pw = user_info[5]
-
-    pw_to_check = pw_hasher(supplied_pw + hash_salt)
-
-    if pw_to_check == correct_pw:
-
-        global LOGGED_IN, USER_ID, USER_TYPE
-        LOGGED_IN = True
-        USER_ID = uid
-        USER_TYPE = usertype
-        print(f'\nWelcome, {username}!')
-
-    else:
-        print('Incorrect email or password. Pleasse, try again.')
-        login()
 
 
 def to_table(cols, rows, la=[], ra=[]):
@@ -100,3 +57,24 @@ def to_table(cols, rows, la=[], ra=[]):
         table.add_row(row)
 
     return table
+
+
+def count_empty_seats(room):
+    free_space = 0
+    for i in range(0, 10):
+        free_space += room[i].count('. ')
+    return free_space
+
+
+
+def seat_is_free(seat, fstring):
+    rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+    letter = 10 * rows.index(seat[0])
+    num = int(seat[1:])
+    chair = fstring[letter + num - 1]
+
+    if chair != 'X':
+        return True
+    else:
+        return False
+
