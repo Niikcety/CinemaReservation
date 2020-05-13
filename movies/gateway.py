@@ -27,7 +27,7 @@ class MovieGateway:
 
             self.db.c.execute(REMOVE_MOVIE, (mid,))
 
-        if movie_title != None:
+        if movie_title is not None:
             return movie_title[0]
         else:
             return 0
@@ -35,6 +35,13 @@ class MovieGateway:
     def check_if_movie_is_deleted(self, mid):
         with self.db.conn:
             self.db.c.execute('SELECT * FROM movies WHERE id = (?)', (mid,))
+            movie = self.db.c.fetchone()
+
+        return movie
+
+    def checck_if_movie_is_added(self, title, rating):
+        with self.db.conn:
+            self.db.c.execute('SELECT * FROM movies WHERE title = (?) AND rating = (?)')
             movie = self.db.c.fetchone()
 
         return movie

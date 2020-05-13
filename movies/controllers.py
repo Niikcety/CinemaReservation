@@ -6,10 +6,12 @@ class MovieController():
         self.movie_gateway = MovieGateway()
 
     def add_movie(self, title, rating):
-        self.movie_gateway.add_movie(title, rating)
+        data = self.movie_gateway.add_movie(title, rating)
 
-        # CHECK IF IT WAS SAVED
-        return True
+        if data == ():
+            return 0
+        else:
+            return 1
 
     def list_movies(self):
         data = self.movie_gateway.list_movies()
