@@ -22,6 +22,10 @@ SHOW_ROOM_PLAN = '''
     SELECT floor_plan FROM projections WHERE id = (?)
 '''
 
-CHECK_IF_DELETED = '''
+CHECK_IF_ADDED = '''
     SELECT * FROM projections WHERE movie_id = (?) AND type = (?) AND date = (?) AND time = (?)
+'''
+
+CHECK_IF_DELETED = '''
+    SELECT * FROM projections WHERE id = (?)
 '''

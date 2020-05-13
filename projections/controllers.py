@@ -1,5 +1,4 @@
 from .gateway import ProjectionGateway
-from .utils import show_projection
 
 
 class ProjectionController:
@@ -10,24 +9,28 @@ class ProjectionController:
         self.projection_gateway.create(movie_id=movie_id, type=type, date=date, time=time)
         check = self.projection_gateway.check_if_projection_is_created(movie_id, type, date, time)
 
-        if check is ():
+        if check is None:
             return 0
         else:
             return 1
 
-    def remove_projection(self, id):
-        projection = self.projection_gateway.remove_projection(id)
+    def remove_projection(self, movie_id):
+        self.projection_gateway.remove_projection(movie_id)
+        result = self.projection_gateway.check_if_projections_is_removed(movie_id)
 
-        return projection
-
-    def list_projection(self, id, date):
-        if date == '':
-            films = self.projection_gateway.list_projection(id, None)
+        if result is None:
+            return 0
         else:
-            films = self.projection_gateway.list_projection(id, date)
+            return 1
+
+    def list_projection(self, movie_id, date):
+        if date == '':
+            films = self.projection_gateway.list_projection(movie_id, None)
+        else:
+            films = self.projection_gateway.list_projection(movie_id, date)
         return films
 
-    def show_room_plan(self, id):
-        room = self.projection_gateway.show_room_plan(id)
+    def show_room_plan(self, movie_id):
+        room = self.projection_gateway.show_room_plan(movie_id)
 
         return room

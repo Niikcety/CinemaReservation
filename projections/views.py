@@ -22,10 +22,13 @@ class ProjectionsViews:
             print('Projection added')
 
     def remove_projection(self):
-        id = input('Please enter the ID of the projection to remove: ')
+        movie_id = input('Please enter the ID of the projection to remove: ')
 
-        # CHECK IF RETURNED TRUE SHOW SUCCES MESSAGE
-        self.controller.remove_projection(id)
+        result = self.controller.remove_projection(movie_id)
+        if result == 0:
+            print(f'Projection with ID: {movie_id} is deleted successfully')
+        else:
+            print(f'Projection with ID: {movie_id} is not deleted successfully')
 
     def list_projection(self):
         movie_id = input('Please enter the ID of the movie you want to watch: ')

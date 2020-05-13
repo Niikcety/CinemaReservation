@@ -38,7 +38,15 @@ class ProjectionGateway:
 
     def check_if_projection_is_created(self, movie_id, type, date, time):
         with self.db.conn:
-            data = self.db.c.execute(CHECK_IF_DELETED, (movie_id, type, date, time))
+            self.db.c.execute(CHECK_IF_ADDED, (movie_id, type, date, time))
+            data = self.db.c.fetchone()
+
+        return data
+
+    def check_if_projections_is_removed(self, movie_id):
+        with self.db.conn:
+            self.db.c.execute(SHOW_PROJECTIONS_BY_FILM_ID, (movie_id,))
+            data = self.db.c.fetchone()
 
         return data
 
