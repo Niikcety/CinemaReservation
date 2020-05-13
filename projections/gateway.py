@@ -1,8 +1,8 @@
 from .models import ProjectionModel
 from .queries import *
 from .utils import into_list_of_tuples
-from db import Database
-from .constants import ROWS
+from db.db import Database
+from .constants import ROWS, FLOOR
 
 
 class ProjectionGateway:
@@ -14,7 +14,7 @@ class ProjectionGateway:
         self.model.validate(movie_id, type, date, time)
 
         with self.db.conn:
-            self.db.c.execute(ADD_PROJECTION, (date, time, type, movie_id))
+            self.db.c.execute(ADD_PROJECTION, (date, time, type, movie_id, FLOOR))
 
     def remove_projection(self, id):
         with self.db.conn:
@@ -35,3 +35,10 @@ class ProjectionGateway:
             self.db.c.execute(SHOW_ROOM_PLAN, (projection_id,))
             room = self.db.c.fetchall()
         return into_list_of_tuples(room, ROWS)
+
+    def check_if_projection_is_created(self, movie_id, type, date, time):
+        with self.db.conn:
+            data = self.db.c.execute(CHECK_IF_DELETED, (movie_id, type, date, time))
+
+        return data
+
