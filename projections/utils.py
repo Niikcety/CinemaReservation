@@ -108,7 +108,7 @@ def into_list_of_tuples(fstr):
 
 def change_floor_panel(place, row_line, seat='X'):
     # example str: B6 = row_line[]
-    index = alphabets.index(place[0]) * 10 + int(place[1]) - 1
+    index = alphabets.index(place[0]) * 10 + int(place[1:]) - 1
     new_str = row_line[:index]
     new_str += seat
     new_str += row_line[index + 1:]

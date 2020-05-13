@@ -1,25 +1,22 @@
-def signup():
-    print('Sign up!')
-    email = input('Enter an email address: ')
-    pw = input('Enter a password: ')
-    hash_salt = salt_shaker()
-    hashed_pw = pw_hasher(pw + hash_salt)
-
-    with db.conn:
-        db.c.execute(USER_SIGNUP, (email, hash_salt, hashed_pw))
+from . gateway import UserGateway
+from .utils import salt_shaker, pw_hasher
 
 
-def login():
-    print('Log in!')
-    email = input('Enter your email address: ')
-    supplied_pw = input('Enter your password: ')
+class UserController:
+    def __init__(self):
+        self.user_gateway = UserGateway()
 
-    with db.conn:
-        db.c.execute('SELECT hash_salt, hashed_pw FROM USERS WHERE email = (?)', (email,))
-        result = db.c.fetchone()
+    def signup(self, email, username, pw):
+        hash_salt = salt_shaker()
+        hashed_pw = pw_hasher(pw + hash_salt)
+
+        self.user_gateway.signup(email, username, hash_salt, hashed_pw)
+
+    def login(self, email, pw):
+        result = self.user_gateway.login(email)
         salt = result[0]
-        target_pw = result[1]
+        hashed_pw = result[1]
 
-    pw_to_check = pw_hasher(supplied_pw + salt)
+        pw_to_check = pw_hasher(pw + salt)
 
-    return pw_to_check == target_pw
+        return pw_to_check == hashed_pw
