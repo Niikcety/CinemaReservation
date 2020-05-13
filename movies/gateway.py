@@ -1,5 +1,5 @@
 from db.db import Database
-from db.db_schema import ADD_MOVIE, LIST_MOVIES
+from db.db_schema import ADD_MOVIE, LIST_MOVIES, REMOVE_MOVIE
 from .models import MovieModel
 
 
@@ -19,3 +19,22 @@ class MovieGateway:
             rows = self.db.c.fetchall()
 
         return (cols, rows)
+
+    def remove_movie(self, mid):
+        with self.db.conn:
+            self.db.c.execute('SELECT title FROM movies WHERE id = (?)', (mid,))
+            movie_title = self.db.c.fetchone()
+
+            self.db.c.execute(REMOVE_MOVIE, (mid,))
+
+        if movie_title != None:
+            return movie_title[0]
+        else:
+            return 0
+
+    def check_if_movie_is_deleted(self, mid):
+        with self.db.conn:
+            self.db.c.execute('SELECT * FROM movies WHERE id = (?)', (mid,))
+            movie = self.db.c.fetchone()
+
+        return movie

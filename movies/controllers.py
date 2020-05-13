@@ -17,3 +17,12 @@ class MovieController():
             return 0
         else:
             return data
+
+    def remove_movie(self, mid):
+        title = self.movie_gateway.remove_movie(mid)
+        if title is 0:
+            return 0
+
+        check_if_deleted = self.movie_gateway.check_if_movie_is_deleted(mid)
+
+        return (title, check_if_deleted)

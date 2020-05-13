@@ -24,16 +24,16 @@ class MovieView:
         else:
             print(to_table(data[0], data[1], la=['title'], ra=['rating']))
 
+    def remove_movie(self):
+        mid = input('Enter movie id: ')
 
-    # def remove_movie():
+        data = self.controller.remove_movie(mid)
+        if data is not 0:
+            movie_title = data[0]
 
-    # mid = input('Enter movie id: ')
-
-    # with db.conn:
-    #     db.c.execute('SELECT title FROM movies WHERE id = (?)', (mid,))
-    #     movie_title = db.c.fetchone()[0]
-
-    #     db.c.execute(REMOVE_MOVIE, (mid,))
-
-    # print(f'\"{movie_title}\" removed from schedule.')
-
+            if data[1] == 0:
+                print(f'\"{movie_title}\" wasn\'t removed from schedule.')
+            else:
+                print(f'\"{movie_title}\" removed from schedule.')
+        else:
+            print(f'There is no movie related to this id - {mid}')
