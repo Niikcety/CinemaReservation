@@ -94,7 +94,9 @@ class MenuController:
 
         print(to_table(cols, rows, la=['title'], ra=['rating']))
 
-    def show_movie_projections(self, mid):
+    def show_movie_projections(self):
+        mid = input('Choose movie ID: ')
+        print(f'\nHere are the projections for your chosen movie:')
         ProjectionsViews().list_projection(mid)
 
     def make_reservation(self):
@@ -104,9 +106,9 @@ class MenuController:
         print('\nHere\'s a list of movies we\'re showing:')
         self.show_movies()
 
-        mid = input('Choose movie ID: ')
-        print(f'\nHere are the projections for your chosen movie:')
-        self.show_movie_projections(mid)
+        # mid = input('Choose movie ID: ')
+        # print(f'\nHere are the projections for your chosen movie:')
+        self.show_movie_projections()
 
         pid = input('Choose projection ID: ')
 
@@ -115,8 +117,9 @@ class MenuController:
             record = self.db.c.fetchone()
 
         floor_string = record[5]
+        date = record[1]
+        time = record[2]
         floor_plan = into_list_of_tuples(floor_string)
-
         empty_seats = count_empty_seats(floor_plan)
         try:
             assert seat_count <= empty_seats, f'Not enough empty seats. There are only {empty_seats} left.'
@@ -126,8 +129,11 @@ class MenuController:
 
         cols = (' ', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
         print(to_table(cols, floor_plan))
-
         seat_names = []
+
+        with self.db.conn:
+            self.db.c.execute('SELECT movies.title FROM projections JOIN movies ON movies.id = projections.movie_id  WHERE projections.id = (?) ', (pid,))
+            movie_title = self.db.c.fetchone()
         for i in range(seat_count):
             seat = input('Enter row letter and seat number: ')
 
@@ -145,12 +151,11 @@ class MenuController:
 
             for seat in seat_names:
                 floor_string = change_floor_panel(seat, floor_string)
-                print(floor_string)
 
             with self.db.conn:
-                self.db.c.execute('UPDATE projections SET floor_plan = (?) WHERE id= (?)', (floor_string, pid))
+                self.db.c.execute('UPDATE projections SET floor_plan = (?) WHERE id = (?)', (floor_string, pid))
 
-        print(f'\nYou\'ve reserved seat(s) {seat_names} for movietitle on date at time')
+        print(f'\nYou\'ve reserved seat(s) {seat_names} for {movie_title[0]} on {date} at {time}')
 
     def list_reservations(self):
 
@@ -163,7 +168,7 @@ class MenuController:
         print(to_table(cols, rows))
 
     def cancel_reservation(self):
-        list_reservations()
+        self.list_reservations()
         rid = input('Choose reservation ID to cancel: ')
 
         with self.db.conn:
@@ -172,4 +177,3 @@ class MenuController:
             self.db.c.execute(CANCEL_RESERVE, (rid,))
 
         print(f'Reservation No. {r_info[0]} has been cancelled successfully!')
-        
