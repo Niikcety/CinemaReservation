@@ -1,18 +1,15 @@
-class UserModel():
+from db.db_alchemy import Base, engine
+from sqlalchemy import Column, Integer, String
 
-    def __init__(self, id=0, nm=None, tp=None):
-        self.id = id
-        self.nm = nm
-        self.tp = tp
 
-    @classmethod
-    def from_db_record(cls, record):
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    username = Column(String(20), nullable=False)
+    usertype = Column(String(5))
+    email = Column(String(50), nullable=False, unique=True)
+    hash_salt = Column(String(10), nullable=False, unique=True)
+    hashed_pw = Column(String(32))
 
-        id = record[0]
-        nm = record[1]
-        tp = record[2]
-
-        return cls(id, nm, tp)
-
-    def make_reservation(self):
-        print('resres')
+    def build_table(self):
+        Base.metadata.create_all(engine)

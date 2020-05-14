@@ -1,5 +1,5 @@
-from . gateway import UserGateway
-from .utils import salt_shaker, pw_hasher
+from .gateway import UserGateway
+from users.utils import salt_shaker, pw_hasher
 
 
 class UserController:

@@ -5,7 +5,6 @@ from hashlib import md5
 from random import choice
 from db import Database
 
-from users.model import UserModel
 
 db = Database()
 

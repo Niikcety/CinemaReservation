@@ -1,32 +1,23 @@
 # import ipdb
-# from menu.model import MenuModel
-
-# menu = MenuModel()
-# menu.controller.db.create_tables()
-# menu.controller.db.fill_tables()
-# menu.start()
-# menu.main_menu()
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 import sys
-# from db.db_alchemy import User, Movie, Projection, Reservation
-
-engine = create_engine('sqlite:///alchemy_cinema.db', echo=True)
-
-
-class Menu():
-    # def __init__(self):
-    #     self.user_mocel = User()
-    @classmethod
-    def build(self):
-        Base = declarative_base()
-        Base.metadata.create_all(engine)
+from models import build_tables, fill_tables
+from view import View
 
 
 if __name__ == '__main__':
-    command = sys.argv[1]
+    # ipdb.set_trace()
+    try:
+        command = sys.argv[1]
+    except IndexError:
+        print('Enter a command. ("build" or "start")')
+        command = input()
 
-    if command == 'build':
-        Menu.build()
+    if command.lower() == 'build':
+        build_tables()
+        fill_tables()
+
+    elif command.lower() == 'start':
+        view = View()
+        view.start()
     else:
-        raise ValueError(f'Unknown command {command}. Valid ones are "build" and "start"')
+        print(f'{command} is not a supported command. Try "build" or "start".')
