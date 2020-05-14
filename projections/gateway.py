@@ -49,4 +49,3 @@ class ProjectionGateway:
             data = self.db.c.fetchone()
 
         return data
-

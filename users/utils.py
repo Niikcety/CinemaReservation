@@ -38,10 +38,6 @@ def pw_prompt(signup=False):
 
     return pw
 
-
-
-
-
 def to_table(cols, rows, la=[], ra=[]):
     table = PrettyTable(cols)
 
