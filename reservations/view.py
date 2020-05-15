@@ -59,3 +59,14 @@ class ReservationView():
 
         data = self.controller.list_reservations(uid)
         print(to_table(data[0], data[1]))
+
+    def cancel_reservation(self):
+        self.list_reservations()
+        rid = input('Choose reservation ID to cancel: ')
+
+        with self.db.conn:
+            self.db.c.execute('SELECT * FROM reservations WHERE id = (?)', (rid,))
+            r_info = self.db.c.fetchone()
+            self.db.c.execute(CANCEL_RESERVE, (rid,))
+
+        print(f'Reservation No. {r_info[0]} has been cancelled successfully!')

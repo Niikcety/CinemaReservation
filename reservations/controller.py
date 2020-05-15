@@ -31,3 +31,6 @@ class ReservationController:
 
     def list_reservations(self, uid):
         return self.gateway.list_reservations(uid)
+
+    def cancel_reservations(self, uid):
+        pass
