@@ -4,8 +4,8 @@ from .queries import *
 from prettytable import PrettyTable
 
 
-cols = ['     1 ', '2 ', '3 ', '4 ', '5 ', '6 ', '7 ', '8 ', '9 ', '10 ']
-rows = ['A   ', 'B   ', 'C   ', 'D   ', 'E   ', 'F   ', 'G   ', 'H   ', 'I   ', 'J   ']
+cols = (' ', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
 room = [['. ', '. ', '. ', '. ', '. ', '. ', '. ', '. ', '. ', '. '],
         ['. ', '. ', '. ', '. ', '. ', '. ', '. ', '. ', '. ', '. '],
         ['. ', '. ', '. ', '. ', '. ', '. ', '. ', '. ', '. ', '. '],
@@ -35,46 +35,11 @@ def count_empty_seats(room):
     return free_space
 
 
-def check_if_seat_is_empty(room, x, y):
-    return room[x - 1][y - 1] == '. '
-
-
-# def add_projection():
-#     movie_id = input('Please enter movie ID to add: ')
-#     type = input('Please enter type of the projection: ')
-#     date = input('Please enter date of the projection(yy-mm-dd): ')
-#     time = input('Please enter time of the projection(hh:mm): ')
-
-#     #VALIDATE 
-
-#     with db.conn:
-#         db.c.execute(ADD_PROJECTION, (movie_id, type, date, time))
-
-
-# def remove_projection():
-#     id = input('Please enter the ID of the projection to remove: ')
-#     with db.conn:
-#         db.c.execute(DELETE_PROJECTION, (id,))
-
-
-# def list_projection(*argv):
-#     if len(argv) == 0:
-#         with db.conn:
-#             db.c.execute(SHOW_ALL_PROJECTIONS)
-#         films = db.c.fetchall()
-#         # list all projections
-#     elif len(argv) == 1:
-#         with db.conn:
-#             db.c.execute(SHOW_PROJECTIONS_BY_FILM_ID, (argv[0],))
-#         films = db.c.fetchall()
-#         # list projections by film ID
-#     elif len(argv) == 2:
-#         # list projections by film ID
-#         with db.conn:
-#             db.c.execute(SHOW_PROJECTIONS_BY_FILM_ID_AND_DATE, (argv[0], argv[1]))
-#         films = db.c.fetchall()
-
-#     return films
+def check_if_seat_is_empty(room, seat):
+    # seat_row = rows.index(seat[:1])
+    # seat_col = int(seat[1:])
+    seat_no = rows.index(seat[:1]) * 10 + int(seat[1:]) - 1
+    return room[seat_no] == '.'
 
 
 # printing
