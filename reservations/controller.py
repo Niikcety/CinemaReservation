@@ -28,3 +28,6 @@ class ReservationController:
             new_floor = change_floor_panel(seat, new_floor)
 
         self.gateway.change_floor_plan(new_floor, pid)
+
+    def list_reservations(self, uid):
+        return self.gateway.list_reservations(uid)

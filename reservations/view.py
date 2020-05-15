@@ -23,7 +23,6 @@ class ReservationView():
         ## NEED TO BE CHANGED
         uid = input('Choose User ID: ')
 
-        # Checks if there are enough seats
         (floor_string, floor_plan) = self.controller.make_reservation(pid, seat_count)
 
         if floor_string == 0:
@@ -48,35 +47,15 @@ class ReservationView():
 
         if command == 'finalize':
             self.controller.save_reservation(uid, pid, seats, floor_string)
+            print('You have successfully made a reservation')
         elif command == 'cancel':
             pass
         else:
             print('Unknown command')
 
+    def list_reservations(self):
+        uid = input('Please enter your User ID: ')
+        print('Your reservations: \n')
 
-        # with self.db.conn:
-        #     self.db.c.execute('SELECT movies.title FROM projections JOIN movies ON movies.id = projections.movie_id  WHERE projections.id = (?) ', (pid,))
-        #     movie_title = self.db.c.fetchone()
-        # for i in range(seat_count):
-        #     seat = input('Enter row letter and seat number: ')
-
-        #     try:
-        #         assert seat_is_free(seat, floor_string), f'Seat {seat} is taken.'
-        #     except AssertionError as exc:
-        #         print(exc)
-        #         self.make_reservation()
-        #     # TODO: validate seat number
-        #     # TODO: check if seat is avaliable
-        #     with self.db.conn:
-        #         self.db.c.execute(RESERVE, (seat[0], seat[1], self.uid, pid))
-        #     seat_names.append(seat)
-        #     print(f'Seat {seat} reserved successfully!')
-
-        #     for seat in seat_names:
-        #         floor_string = change_floor_panel(seat, floor_string)
-
-        #     with self.db.conn:
-        #         self.db.c.execute('UPDATE projections SET floor_plan = (?) WHERE id = (?)', (floor_string, pid))
-
-        # print(f'\nYou\'ve reserved seat(s) {seat_names} for {movie_title[0]} on {date} at {time}')
-
+        data = self.controller.list_reservations(uid)
+        print(to_table(data[0], data[1]))

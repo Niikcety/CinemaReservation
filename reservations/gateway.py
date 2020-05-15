@@ -23,3 +23,18 @@ class ReservationGateway:
     def change_floor_plan(self, floor, pid):
         with self.db.conn:
             self.db.c.execute('UPDATE projections SET floor_plan = (?) WHERE id = (?)', (floor, pid))
+
+    def list_reservations(self, uid):
+        with self.db.conn:
+            self.db.c.execute('''
+                                SELECT row || seat as seat, movies.title, projections.date, projections.time
+                                FROM reservations
+                                JOIN projections ON projections.id = reservations.projection_id
+                                JOIN movies ON movies.id = projections.movie_id
+                                WHERE user_id = (?);
+                                ''', (uid,))
+            cols = [cd[0] for cd in self.db.c.description]
+            rows = self.db.c.fetchall()
+
+        return (cols, rows)
+
